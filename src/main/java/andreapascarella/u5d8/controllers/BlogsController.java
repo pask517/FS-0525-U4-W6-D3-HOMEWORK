@@ -3,6 +3,7 @@ package andreapascarella.u5d8.controllers;
 import andreapascarella.u5d8.entities.Blog;
 import andreapascarella.u5d8.payloads.NewBlogPayload;
 import andreapascarella.u5d8.services.BlogsService;
+import andreapascarella.u5d8.services.UsersService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
@@ -12,10 +13,12 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/blogs")
 public class BlogsController {
     private final BlogsService blogsService;
+    private final UsersService usersService;
 
     @Autowired
-    public BlogsController(BlogsService blogsService) {
+    public BlogsController(BlogsService blogsService, UsersService usersService) {
         this.blogsService = blogsService;
+        this.usersService = usersService;
     }
 
     @PostMapping
@@ -48,13 +51,5 @@ public class BlogsController {
     public void getBlogByIdAndDelete(@PathVariable long blogId) {
         this.blogsService.findBlogByIdAndDelete(blogId);
     }
-
-    @GetMapping("/{userId}")
-    public Page<Blog> getBlogsByAuthor(@RequestParam(defaultValue = "0") int page,
-                                       @RequestParam(defaultValue = "10") int size,
-                                       @RequestParam(defaultValue = "id") String orderBy,
-                                       @RequestParam(defaultValue = "asc") String sortCriteria, @PathVariable long authorId) {
-
-        return this.blogsService.findAllBlogs(page, size, orderBy, sortCriteria);
-    }
+    
 }
